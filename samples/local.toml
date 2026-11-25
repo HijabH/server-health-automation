@@ -1,0 +1,23 @@
+# Runs on any Linux machine without root, for trying the tool out.
+
+[server]
+name = "my-laptop"
+
+[alert]
+state_file = "state.json"
+
+[[check]]
+type = "disk"
+name = "Root disk"
+path = "/"
+
+[[check]]
+type = "memory"
+name = "Memory"
+
+[[check]]
+type = "backup"
+name = "Sample backups"
+directory = "samples/backups"
+pattern = "*.sql.gz"
+max_age_hours = 100000

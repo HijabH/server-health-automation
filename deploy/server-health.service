@@ -1,0 +1,16 @@
+[Unit]
+Description=Server health checks
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=server-health
+WorkingDirectory=/opt/server-health-automation
+EnvironmentFile=-/etc/server-health/webhook.env
+ExecStart=/usr/bin/python3 -m healthcheck --config /etc/server-health/checks.toml
+# A non-zero exit code means WARN, CRIT or UNKNOWN, not a failed unit.
+SuccessExitStatus=1 2 3
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+StateDirectory=server-health

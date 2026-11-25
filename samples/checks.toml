@@ -1,0 +1,68 @@
+# Example for a DHIS2 server running behind Nginx with PostgreSQL and Tomcat.
+
+[server]
+name = "dhis2-prod-01"
+
+[alert]
+# Better: set HEALTHCHECK_WEBHOOK_URL in the environment instead of writing the URL here.
+webhook_url = ""
+state_file = "/var/lib/server-health/state.json"
+alert_on_unknown = true
+
+[[check]]
+type = "disk"
+name = "Root disk"
+path = "/"
+warn_percent = 80
+crit_percent = 90
+
+[[check]]
+type = "disk"
+name = "Database disk"
+path = "/var/lib/postgresql"
+warn_percent = 75
+crit_percent = 85
+
+[[check]]
+type = "memory"
+name = "Memory"
+warn_percent = 85
+crit_percent = 95
+
+[[check]]
+type = "service"
+name = "Nginx"
+unit = "nginx"
+
+[[check]]
+type = "service"
+name = "PostgreSQL"
+unit = "postgresql"
+
+[[check]]
+type = "service"
+name = "Tomcat"
+unit = "tomcat9"
+
+[[check]]
+type = "http"
+name = "DHIS2 API"
+url = "https://dhis2.example.org/api/system/ping"
+expected_status = 200
+warn_ms = 2000
+timeout_seconds = 10
+
+[[check]]
+type = "tls"
+name = "TLS certificate"
+host = "dhis2.example.org"
+warn_days = 21
+crit_days = 7
+
+[[check]]
+type = "backup"
+name = "Nightly database backup"
+directory = "/var/backups/dhis2"
+pattern = "dhis2-*.sql.gz"
+max_age_hours = 26
+min_size_bytes = 1048576

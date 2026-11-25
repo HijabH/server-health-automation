@@ -1,0 +1,2 @@
+# Alternative to the systemd timer: run every 5 minutes and keep a log.
+*/5 * * * * cd /opt/server-health-automation && HEALTHCHECK_WEBHOOK_URL=https://hooks.example.org/... /usr/bin/python3 -m healthcheck --config /etc/server-health/checks.toml >> /var/log/server-health.log 2>&1
